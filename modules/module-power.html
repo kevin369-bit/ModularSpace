@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Power Module | Modular AI Data Center</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;900&family=Noto+Sans+SC:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #0057FF;
+      --primary-dark: #003FCC;
+      --accent: #00D4FF;
+      --bg: #0A0E1A;
+      --bg-card: #111827;
+      --bg-card2: #1a2235;
+      --text: #F0F4FF;
+      --text-muted: #8B9DC3;
+      --border: #1E2D4A;
+      --white: #ffffff;
+    }
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body { font-family: 'Noto Sans SC', 'Inter', sans-serif; background: var(--bg); color: var(--text); line-height: 1.7; overflow-x: hidden; }
+    html { scroll-behavior: smooth; }
+
+    /* === 双语切换 === */
+    [lang="zh"] { display:none !important; }
+    body.lang-zh [lang="zh"] { display:contents !important; }
+    body.lang-zh [lang="en"] { display:none !important; }
+
+    /* === NAV === */
+    nav { position: fixed; top:0; left:0; right:0; z-index:1000; background: rgba(10,14,26,0.85); backdrop-filter: blur(20px); border-bottom: 1px solid var(--border); padding: 0 64px; height: 72px; display: flex; align-items: center; justify-content: space-between; }
+    .nav-logo { font-weight:900; font-size:20px; letter-spacing:1px; color:var(--white); text-decoration:none; }
+    .nav-logo span { color:var(--accent); }
+    .nav-links { display:flex; gap:36px; list-style:none; }
+    .nav-links a { color:var(--text-muted); text-decoration:none; font-size:16px; font-weight:500; transition:color 0.3s; }
+    .nav-links a:hover, .nav-links a.active { color:var(--white); }
+    .nav-cta { background:var(--primary); color:white; border:none; padding:8px 20px; border-radius:6px; font-size:16px; font-weight:600; cursor:pointer; transition:background 0.3s; }
+    .nav-cta:hover { background:var(--primary-dark); }
+    .lang-toggle { background: var(--primary); border:1px solid var(--primary); color:var(--white); font-size:14px; font-weight:600; padding:6px 14px; border-radius:20px; cursor:pointer; transition:all 0.3s; margin-left:16px; }
+    .lang-toggle:hover { background: var(--primary-dark); }
+
+    /* === PAGE HERO === */
+    .page-hero { position: relative; height: 800px; overflow: hidden; margin-top: 72px; }
+    .hero-img { position: absolute; left: 32%; top: -20px; width: 75%; height: 100%; object-fit: cover; object-position: center center; filter: blur(0px); opacity: 1; mask-image: linear-gradient(to right, transparent 0%, black 15%, black 80%, transparent 100%), linear-gradient(to bottom, black 70%, transparent 100%); -webkit-mask-image: linear-gradient(to right, transparent 0%, black 15%, black 80%, transparent 100%), linear-gradient(to bottom, black 70%, transparent 100%); -webkit-mask-composite: source-in; mask-composite: intersect; }
+    .hero-content { position: absolute; bottom: 100px; left: 5%; z-index: 10; max-width: 560px; }
+    .hero-content .section-tag { color: var(--accent); font-size: 18px; }
+    .hero-content .section-title { font-size: clamp(28px, 3.5vw, 48px); margin-bottom: 16px; }
+    .hero-content p { font-size: 18px; color: var(--text-muted); line-height: 1.8; }
+
+    /* === MODULE OVERVIEW === */
+    .module-overview { padding: 100px 48px; max-width: 1440px; margin: 0 auto; }
+    .module-overview p { font-size: 16px; color: var(--text-muted); line-height: 1.8; text-align: justify; max-width: 800px; margin-bottom: 48px; }
+    .section-tag { display: inline-block; font-size: 16px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--primary); margin-bottom: 12px; }
+    .section-title { font-size: clamp(20px, 2.5vw, 44px); font-weight: 900; margin-bottom: 20px; line-height: 1.2; text-align: left; }
+
+    /* === FEATURES === */
+    .features-section { background: var(--bg-card); padding: 100px 48px; }
+    .section-inner { max-width: 1440px; margin: 0 auto; }
+    .features-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+    .feature-card { background: var(--bg); border: 1px solid var(--border); border-radius: 16px; padding: 32px 28px; text-align: center; transition: all 0.3s; }
+    .feature-card:hover { transform: translateY(-4px); border-color: var(--primary); }
+    .feature-icon { font-size: 36px; margin-bottom: 16px; }
+    .feature-card h3 { font-size: 18px; font-weight: 700; margin-bottom: 10px; }
+    .feature-card p { font-size: 16px; color: var(--text-muted); line-height: 1.8; text-align: justify; }
+
+    /* === SPECS === */
+    .specs-section { padding: 100px 48px; }
+    .specs-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+    .spec-row { display: flex; justify-content: space-between; align-items: center; padding: 14px 18px; background: var(--bg-card); border-radius: 8px; border: 1px solid var(--border); }
+    .spec-label { font-size: 15px; color: var(--text-muted); }
+    .spec-value { font-size: 15px; font-weight: 600; color: #ffffff; }
+
+    /* === MODULE NAV === */
+    .module-nav-section { background: var(--bg-card); padding: 64px 48px; text-align: center; }
+    .module-nav-section p { margin-bottom: 24px; color: var(--text-muted); }
+    .nav-mod-btn { display: inline-block; padding: 12px 28px; border: 2px solid; border-radius: 8px; font-size: 16px; font-weight: 600; text-decoration: none; transition: all 0.3s; margin: 0 8px; }
+    .nav-mod-btn:hover { background: rgba(255,255,255,0.05); }
+
+    /* === FOOTER === */
+    footer { background: var(--bg-card2); border-top: 1px solid var(--border); padding: 32px 64px; text-align: center; }
+    .footer-inner p { font-size: 14px; color: var(--text-muted); }
+  </style>
+</head>
+<body class="lang-en">
+
+  <nav>
+    <a href="../modular-dc.html" class="nav-logo">Modular <span>DC</span></a>
+    <ul class="nav-links">
+      <li><a href="../modular-dc.html"><span lang="zh">首页</span><span lang="en">Home</span></a></li>
+      <li><a href="module-power.html" class="active"><span lang="zh">配电模块</span><span lang="en">Power Module</span></a></li>
+      <li><a href="module-it.html"><span lang="zh">IT 模块</span><span lang="en">IT Module</span></a></li>
+      <li><a href="module-cooling.html"><span lang="zh">冷却模块</span><span lang="en">Cooling Module</span></a></li>
+      <li><a href="contact.html"><span lang="zh">联系我们</span><span lang="en">Contact</span></a></li>
+    </ul>
+    <div style="display:flex;align-items:center;gap:12px">
+      <button class="lang-toggle" id="langBtn" onclick="toggleLang()">中文</button>
+    </div>
+  </nav>
+
+  <section class="page-hero">
+    <img src="../images/power.52.png" alt="Power Module" class="hero-img">
+    <div class="hero-content">
+      <h2 class="section-title"><span lang="zh">配电模块</span><span lang="en">Power Module</span></h2>
+      <p><span lang="zh">配电模块是能源的核心载体，集成中压、低压、不间断电源与能源管理系统，为 AI 集群提供高可靠、高效率的电力供应。</span><span lang="en">The Power Module is the energy core — integrating MV, LV, UPS, and EMS to deliver high-reliability, high-efficiency power for AI clusters.</span></p>
+    </div>
+  </section>
+
+  <section class="features-section">
+    <div class="section-inner">
+      <h2 class="section-title"><span lang="zh">核心特性</span><span lang="en">Key Features</span></h2>
+      <div class="features-grid">
+        <div class="feature-card">
+          <div class="feature-icon">⚡</div>
+          <h3><span lang="zh">高效配电</span><span lang="en">High-Efficiency Power</span></h3>
+          <p><span lang="zh">链路效率高达 98%，大幅降低 PUE，减少能源浪费。</span><span lang="en">Up to 98% link efficiency — drastically lower PUE and reduce energy waste.</span></p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">🔋</div>
+          <h3><span lang="zh">不间断供电</span><span lang="en">Uninterrupted Power</span></h3>
+          <p><span lang="zh">集成 UPS 与 EMS，支持多路市电接入，确保零中断。</span><span lang="en">Integrated UPS and EMS with multi-source grid access — zero downtime.</span></p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">📊</div>
+          <h3><span lang="zh">智能管理</span><span lang="en">Intelligent Management</span></h3>
+          <p><span lang="zh">实时监测电力参数，AI 预测性维护，降低运维成本。</span><span lang="en">Real-time power monitoring with AI predictive maintenance — lower OPEX.</span></p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="specs-section">
+    <div class="section-inner">
+      <h2 class="section-title"><span lang="zh">技术规格</span><span lang="en">Technical Specifications</span></h2>
+      <div class="specs-grid">
+        <div class="spec-row"><span class="spec-label"><span lang="zh">额定功率</span><span lang="en">Rated Power</span></span><span class="spec-value"><span lang="zh">2000 kW</span><span lang="en">2000 kW</span></span></div>
+        <div class="spec-row"><span class="spec-label"><span lang="zh">电芯材料</span><span lang="en">Cell Chemistry</span></span><span class="spec-value"><span lang="zh">磷酸铁锂</span><span lang="en">LFP (LiFePO₄)</span></span></div>
+        <div class="spec-row"><span class="spec-label"><span lang="zh">备电时间</span><span lang="en">Backup Duration</span></span><span class="spec-value"><span lang="zh">15 min</span><span lang="en">15 min</span></span></div>
+        <div class="spec-row"><span class="spec-label"><span lang="zh">模块尺寸（长×宽×高）</span><span lang="en">Module Dimensions (L×W×H)</span></span><span class="spec-value"><span lang="zh">12192×2438×2896 mm</span><span lang="en">12192×2438×2896 mm</span></span></div>
+        <div class="spec-row"><span class="spec-label"><span lang="zh">输入电压</span><span lang="en">Input Voltage</span></span><span class="spec-value"><span lang="zh">400±10% V</span><span lang="en">400±10% V</span></span></div>
+        <div class="spec-row"><span class="spec-label"><span lang="zh">链路效率</span><span lang="en">Efficiency</span></span><span class="spec-value"><span lang="zh">高达 98%</span><span lang="en">Up to 98%</span></span></div>
+        <div class="spec-row"><span class="spec-label"><span lang="zh">设计寿命</span><span lang="en">Design Life</span></span><span class="spec-value"><span lang="zh">10 年</span><span lang="en">10 years</span></span></div>
+        <div class="spec-row"><span class="spec-label"><span lang="zh">可靠性等级</span><span lang="en">Tier Level</span></span><span class="spec-value"><span lang="zh">Tier 3</span><span lang="en">Tier 3</span></span></div>
+        <div class="spec-row"><span class="spec-label"><span lang="zh">工作温度</span><span lang="en">Operating Temp</span></span><span class="spec-value"><span lang="zh">-15~50℃</span><span lang="en">-15~50℃</span></span></div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="footer-inner">
+      <p><span lang="zh">© 2026 Modular AI Data Center. All rights reserved.</span><span lang="en">© 2026 Modular AI Data Center. All rights reserved.</span></p>
+    </div>
+  </footer>
+
+  <script>
+    function toggleLang() {
+      var body = document.body;
+      var btn = document.getElementById('langBtn');
+      if (body.classList.contains('lang-zh')) {
+        body.classList.remove('lang-zh');
+        body.classList.add('lang-en');
+        btn.textContent = '中文';
+        localStorage.setItem('lang', 'en');
+      } else {
+        body.classList.remove('lang-en');
+        body.classList.add('lang-zh');
+        btn.textContent = 'EN';
+        localStorage.setItem('lang', 'zh');
+      }
+    }
+    (function(){
+      var lang = localStorage.getItem('lang') || 'en';
+      document.body.classList.remove('lang-zh','lang-en');
+      document.body.classList.add(lang === 'zh' ? 'lang-zh' : 'lang-en');
+      document.getElementById('langBtn').textContent = lang === 'zh' ? 'EN' : '中文';
+    })();
+  </script>
+</body>
+</html>
