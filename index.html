@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Modular AI Data Center</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;900&family=Noto+Sans+SC:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #0057FF;
+      --primary-dark: #003FCC;
+      --accent: #00D4FF;
+      --bg: #0A0E1A;
+      --bg-card: #111827;
+      --bg-card2: #1a2235;
+      --text: #F0F4FF;
+      --text-muted: #8B9DC3;
+      --border: #1E2D4A;
+      --white: #ffffff;
+    }
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body {
+      font-family: 'Noto Sans SC', 'Inter', sans-serif;
+      background: var(--bg); color: var(--text);
+      line-height: 1.7; overflow-x: hidden;
+    }
+    html { scroll-behavior: smooth; }
+
+    /* === 双语切换 === */
+    [lang="zh"] { display:none !important; }
+    body.lang-zh [lang="zh"] { display:contents !important; }
+    body.lang-zh [lang="en"] { display:none !important; }
+
+    /* === NAV === */
+    nav {
+      position: fixed; top:0; left:0; right:0; z-index:1000;
+      background: rgba(10,14,26,0.85); backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border);
+      padding: 0 64px; height: 72px;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .nav-logo { font-weight:900; font-size:20px; letter-spacing:1px; color:var(--white); text-decoration:none; }
+    .nav-logo span { color:var(--accent); }
+    .nav-links { display:flex; gap:36px; list-style:none; }
+    .nav-links a { color:var(--text-muted); text-decoration:none; font-size:16px; font-weight:500; transition:color 0.3s; }
+    .nav-links a:hover, .nav-links a.active { color:var(--white); }
+    .nav-cta {
+      background:var(--primary); color:white; border:none;
+      padding:8px 20px; border-radius:6px; font-size:16px;
+      font-weight:600; cursor:pointer; transition:background 0.3s;
+    }
+    .nav-cta:hover { background:var(--primary-dark); }
+    .lang-toggle {
+      background: var(--primary); border:1px solid var(--primary);
+      color:var(--white); font-size:14px; font-weight:600;
+      padding:6px 14px; border-radius:20px; cursor:pointer;
+      transition:all 0.3s; margin-left:16px;
+    }
+    .lang-toggle:hover { background:rgba(255,255,255,0.15); }
+
+    /* === HERO BANNER === */
+    .hero-banner {
+      position: relative; height: 800px;
+      overflow: hidden; margin-top: 72px;
+    }
+    .hero-banner .hero-img {
+      position: absolute; left: 32%; top: -20px;
+      width: 75%; height: 100%;
+      object-fit: cover; object-position: center center;
+      filter: blur(0px); opacity: 1;
+      mask-image: linear-gradient(to right, transparent 0%, black 15%, black 80%, transparent 100%), linear-gradient(to bottom, black 70%, transparent 100%);
+      -webkit-mask-image: linear-gradient(to right, transparent 0%, black 15%, black 80%, transparent 100%), linear-gradient(to bottom, black 70%, transparent 100%);
+      -webkit-mask-composite: source-in; mask-composite: intersect;
+    }
+    .hero-banner .hero-content {
+      position: absolute; bottom: 100px; left: 5%; z-index: 10; max-width: 560px;
+    }
+    .hero-banner .hero-content .banner-tag {
+      display: inline-block; font-size: 18px; font-weight: 700;
+      letter-spacing: 2px; text-transform: uppercase;
+      color: var(--accent); margin-bottom: 16px;
+    }
+    .hero-banner .hero-content h1 {
+      font-size: clamp(32px, 4vw, 56px); font-weight: 900;
+      line-height: 1.1; margin-bottom: 20px;
+    }
+    .hero-banner .hero-content p {
+      font-size: 18px; color: var(--text-muted);
+      line-height: 1.8; margin-bottom: 32px;
+    }
+    .hero-banner .hero-content .banner-btn {
+      background: var(--primary); color: white; border: none;
+      padding: 14px 32px; border-radius: 8px; font-size: 16px;
+      font-weight: 600; cursor: pointer; transition: background 0.3s;
+    }
+    .hero-banner .hero-content .banner-btn:hover { background: var(--primary-dark); }
+
+    /* === MODULE INTRO === */
+    .module-intro {
+      background: linear-gradient(180deg, var(--bg) 0%, rgba(0,87,255,0.04) 100%);
+      padding: 100px 48px;
+    }
+    .module-intro-inner { max-width: 1440px; margin: 0 auto; }
+    .section-tag {
+      display: inline-block; font-size: 16px; font-weight: 700;
+      letter-spacing: 2px; text-transform: uppercase;
+      color: var(--primary); margin-bottom: 12px;
+    }
+    .section-title {
+      font-size: clamp(20px, 2.5vw, 44px); font-weight: 900;
+      margin-bottom: 20px; line-height: 1.2;
+    }
+    .section-sub {
+      color: var(--text-muted); font-size: 18px;
+      max-width: none; margin-bottom: 56px; line-height: 1.8;
+    }
+    .module-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+    .module-card {
+      background: var(--bg-card); border: 1px solid var(--border);
+      border-radius: 16px; padding: 32px 28px;
+      transition: all 0.3s; position: relative; overflow: hidden;
+      text-decoration: none; color: inherit; display: flex; flex-direction: column;
+    }
+    .module-card:hover { transform: translateY(-4px); border-color: rgba(255,255,255,0.1); }
+    .module-card::before {
+      content: ''; position: absolute; top: 0; left: 0; right: 0;
+      height: 3px; border-radius: 16px 16px 0 0;
+      background: var(--primary);
+    }
+    .card-icon { font-size: 32px; margin-bottom: 12px; }
+    .module-card h3 { font-size: 20px; font-weight: 700; margin-bottom: 10px; }
+    .module-card p { font-size: 16px; color: var(--text-muted); margin-bottom: 20px; line-height: 1.8; text-align: justify; flex: 1; }
+    .spec-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px 16px; }
+    .spec-item { display: flex; flex-direction: column; gap: 2px; padding: 8px 0; border-bottom: 1px solid var(--border); }
+    .spec-label { font-size: 13px; color: var(--text-muted); }
+    .spec-value { font-size: 14px; font-weight: 600; color: var(--accent); }
+    .card-link { font-size: 16px; font-weight: 600; margin-top: auto; display: inline-block; }
+
+    /* === ADVANTAGES === */
+    #advantages { background: var(--bg-card); padding: 100px 48px; }
+    .section-inner { max-width: 1440px; margin: 0 auto; }
+    .divider { height: 1px; background: var(--border); max-width: 1440px; margin: 0 auto; }
+    .adv-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px; }
+    .adv-card {
+      background: var(--bg); border: 1px solid var(--border);
+      border-radius: 16px; padding: 32px 28px; transition: all 0.3s;
+      position: relative; overflow: hidden;
+    }
+    .adv-card:hover { transform: translateY(-4px); border-color: var(--primary); }
+    .adv-card::after {
+      content: ''; position: absolute; top: 0; left: 0; right: 0;
+      height: 2px; background: linear-gradient(90deg, var(--primary), var(--accent));
+      opacity: 0; transition: opacity 0.3s;
+    }
+    .adv-card:hover::after { opacity: 1; }
+    .adv-icon { font-size: 32px; margin-bottom: 12px; filter: grayscale(100%); }
+    .adv-card h3 { font-size: 18px; font-weight: 700; margin-bottom: 10px; }
+    .adv-desc { font-size: 16px; color: var(--text-muted); line-height: 1.8; }
+
+    /* === SCENARIOS === */
+    #scenarios { background: var(--bg); padding: 100px 48px; }
+    .scenario-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px; }
+    .scenario-card {
+      background: var(--bg-card); border: 1px solid var(--border);
+      border-radius: 16px; padding: 32px 28px; transition: all 0.3s;
+    }
+    .scenario-card:hover { transform: translateY(-4px); border-color: var(--primary); }
+    .scenario-card h3 { font-size: 20px; font-weight: 700; margin-bottom: 10px; color: #ffffff; }
+    .scenario-card p { font-size: 16px; color: var(--text-muted); line-height: 1.8; text-align: justify; }
+
+    /* === FOOTER === */
+    footer { background: var(--bg-card2); border-top: 1px solid var(--border); padding: 32px 64px; text-align: center; }
+    .footer-inner p { font-size: 14px; color: var(--text-muted); }
+  </style>
+</head>
+<body class="lang-en">
+
+  <nav>
+    <a href="modular-dc.html" class="nav-logo">Modular <span>DC</span></a>
+    <ul class="nav-links">
+      <li><a href="#banner" class="active"><span lang="zh">首页</span><span lang="en">Home</span></a></li>
+      <li><a href="#modules"><span lang="zh">三大模块</span><span lang="en">Three Modules</span></a></li>
+      <li><a href="#advantages"><span lang="zh">核心优势</span><span lang="en">Core Advantages</span></a></li>
+      <li><a href="#scenarios"><span lang="zh">应用场景</span><span lang="en">Scenarios</span></a></li>
+      <li><a href="modules/contact.html"><span lang="zh">联系我们</span><span lang="en">Contact</span></a></li>
+    </ul>
+    <div style="display:flex;align-items:center;gap:12px">
+      <button class="lang-toggle" id="langBtn" onclick="toggleLang()">中文</button>
+    </div>
+  </nav>
+
+  <section class="hero-banner" id="banner">
+    <img src="images/all.49.png" alt="Modular Data Center" class="hero-img">
+    <div class="hero-content">
+      <h1><span lang="zh">模块化 AI 数据中心</span><span lang="en">Modular AI Data Center</span></h1>
+      <p><span lang="zh">将数据中心解耦为配电、IT、冷却三大独立舱体，以标准化集装箱为载体，实现近岸制造、全球海运、现场即插即用。</span><span lang="en">Decoupling data centers into three independent modules — Power, IT, and Cooling — shipped in standard containers for near-shore manufacturing, global seafreight, and plug-and-play on-site deployment.</span></p>
+      <a href="#modules"><button class="banner-btn"><span lang="zh">探索三大模块 ↓</span><span lang="en">Explore Three Modules ↓</span></button></a>
+    </div>
+  </section>
+
+  <section class="module-intro" id="modules">
+    <div class="module-intro-inner">
+      <h2 class="section-title"><span lang="zh">三舱解耦 · 灵活扩展</span><span lang="en">Three-Cabin Decoupled · Flexible Expansion</span></h2>
+      <p class="section-sub"><span lang="zh">将数据中心解耦为配电、IT、冷却三大独立舱体，以标准化集装箱为载体，实现近岸制造、全球海运、现场即插即用。</span><span lang="en">Decoupling data centers into three independent modules — Power, IT, and Cooling — shipped in standard containers for near-shore manufacturing, global seafreight, and plug-and-play on-site deployment.</span></p>
+      <div class="module-grid">
+        <a href="modules/module-power.html" class="module-card" style="color:inherit">
+          <div class="card-icon" style="color:#ffffff"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg></div>
+          <h3 style="color:#ffffff"><span lang="zh">配电模块</span><span lang="en">Power Module</span></h3>
+          <p><span lang="zh">高密度配电舱，集成中压、低压、不间断电源、能源管理系统，为 AI 集群提供高可靠电力供应。</span><span lang="en">High-density power cabin integrating MV, LV, UPS, and EMS — delivering reliable power for AI clusters.</span></p>
+          <div class="card-link" style="color:#ffffff"><span lang="zh">查看详情 →</span><span lang="en">View Details →</span></div>
+        </a>
+        <a href="modules/module-it.html" class="module-card" style="color:inherit">
+          <div class="card-icon" style="color:#ffffff"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6"/><line x1="9" y1="2" x2="9" y2="4"/><line x1="15" y1="2" x2="15" y2="4"/><line x1="9" y1="20" x2="9" y2="22"/><line x1="15" y1="20" x2="15" y2="22"/><line x1="20" y1="9" x2="22" y2="9"/><line x1="20" y1="14" x2="22" y2="14"/><line x1="2" y1="9" x2="4" y2="9"/><line x1="2" y1="14" x2="4" y2="14"/></svg></div>
+          <h3 style="color:#ffffff"><span lang="zh">IT 模块</span><span lang="en">IT Module</span></h3>
+          <p><span lang="zh">高密度算力舱，支持 CPU/GPU 混布，标准化 40 尺高柜集装箱封装，单舱最大支持 10 台 IT 机柜。</span><span lang="en">High-density compute cabin supporting CPU/GPU hybrid deployment in standard 40ft high-cube containers. Up to 10 IT racks per cabin.</span></p>
+          <div class="card-link" style="color:#ffffff"><span lang="zh">查看详情 →</span><span lang="en">View Details →</span></div>
+        </a>
+        <a href="modules/module-cooling.html" class="module-card" style="color:inherit">
+          <div class="card-icon" style="color:#ffffff"><svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20"/><path d="M2 12h4"/><path d="M18 12h4"/><path d="m4.93 4.93 2.83 2.83"/><path d="m16.24 16.24 2.83 2.83"/><path d="m4.93 19.07 2.83-2.83"/><path d="m16.24 7.76 2.83-2.83"/><circle cx="12" cy="12" r="3"/></svg></div>
+          <h3 style="color:#ffffff"><span lang="zh">冷却模块</span><span lang="en">Cooling Module</span></h3>
+          <p><span lang="zh">高效散热舱，支持干冷塔/湿冷塔两种散热模式，标准化 40 尺高柜集装箱封装，单舱最大支持 2 套冷塔（1+1 冗余）。</span><span lang="en">High-efficiency cooling cabin with dry/wet cooling tower options in standard 40ft containers. Up to 2 cooling towers (1+1 redundant) per cabin.</span></p>
+          <div class="card-link" style="color:#ffffff"><span lang="zh">查看详情 →</span><span lang="en">View Details →</span></div>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <section id="advantages">
+    <div class="section-inner">
+      <h2 class="section-title"><span lang="zh">四大核心优势</span><span lang="en">Four Core Advantages</span></h2>
+      <p class="section-sub"><span lang="zh">标准化、解耦化、快交付、高效散热——重新定义数据中心建设范式。</span><span lang="en">Standardized, decoupled, fast deployment, high-efficiency cooling — redefining the data center construction paradigm.</span></p>
+      <div class="adv-grid">
+        <div class="adv-card">
+          <div class="adv-icon">🔧</div>
+          <h3><span lang="zh">标准化制造</span><span lang="en">Standardized Manufacturing</span></h3>
+          <p class="adv-desc"><span lang="zh">工厂预制，近岸制造，品质可控，成本优化。</span><span lang="en">Factory prefabricated, near-shore manufacturing — quality assured, cost optimized.</span></p>
+        </div>
+        <div class="adv-card">
+          <div class="adv-icon">🏗️</div>
+          <h3><span lang="zh">三舱解耦</span><span lang="en">Three-Cabin Decoupled</span></h3>
+          <p class="adv-desc"><span lang="zh">配电、IT、冷却独立舱体，灵活组合，互不影响。</span><span lang="en">Power, IT, and Cooling are independent cabins — flexible combinations, zero interference.</span></p>
+        </div>
+        <div class="adv-card">
+          <div class="adv-icon">🚀</div>
+          <h3><span lang="zh">快交付</span><span lang="en">Rapid Deployment</span></h3>
+          <p class="adv-desc"><span lang="zh">标准集装箱海运，现场即插即用，大幅缩短交付周期。</span><span lang="en">Standard container seafreight, plug-and-play on site — radically shorter lead times.</span></p>
+        </div>
+        <div class="adv-card">
+          <div class="adv-icon">🍃</div>
+          <h3><span lang="zh">高效散热</span><span lang="en">High-Efficiency Cooling</span></h3>
+          <p class="adv-desc"><span lang="zh">干冷/湿冷双模式，智能化温控，PUE 低至 1.1。</span><span lang="en">Dry/wet dual-mode cooling with intelligent temperature control. PUE as low as 1.1.</span></p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <section id="scenarios">
+    <div class="section-inner">
+      <h2 class="section-title"><span lang="zh">典型应用场景</span><span lang="en">Typical Application Scenarios</span></h2>
+      <p class="section-sub"><span lang="zh">从 AI 大模型训练到边缘计算节点，模块化数据中心覆盖广泛场景。</span><span lang="en">From large AI model training to edge computing nodes — modular data centers cover a wide range of scenarios.</span></p>
+      <div class="scenario-grid">
+        <div class="scenario-card">
+          <h3><span lang="zh">AI 大模型训练</span><span lang="en">Large AI Model Training</span></h3>
+          <p><span lang="zh">为千亿级参数大模型训练提供高密度算力与高效散热。</span><span lang="en">High-density compute and efficient cooling for 100B+ parameter model training.</span></p>
+        </div>
+        <div class="scenario-card">
+          <h3><span lang="zh">边缘计算节点</span><span lang="en">Edge Computing Node</span></h3>
+          <p><span lang="zh">靠近数据源部署，降低延迟，提升数据主权与合规性。</span><span lang="en">Deploy close to data sources — lower latency, better data sovereignty and compliance.</span></p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="footer-inner">
+      <p><span lang="zh">© 2026 Modular AI Data Center. All rights reserved.</span><span lang="en">© 2026 Modular AI Data Center. All rights reserved.</span></p>
+    </div>
+  </footer>
+
+  <script>
+    // Smooth scroll for nav links
+    var links = document.querySelectorAll('a[href^="#"]');
+    for (var i = 0; i < links.length; i++) {
+      links[i].addEventListener('click', function(e) {
+        var target = document.querySelector(this.getAttribute('href'));
+        if (target) { e.preventDefault(); target.scrollIntoView({ behavior:'smooth' }); }
+      });
+    }
+
+    function toggleLang() {
+      var body = document.body;
+      var btn = document.getElementById('langBtn');
+      if (body.classList.contains('lang-zh')) {
+        body.classList.remove('lang-zh');
+        body.classList.add('lang-en');
+        btn.textContent = '中文';
+        localStorage.setItem('lang', 'en');
+      } else {
+        body.classList.remove('lang-en');
+        body.classList.add('lang-zh');
+        btn.textContent = 'EN';
+        localStorage.setItem('lang', 'zh');
+      }
+    }
+
+    (function(){
+      var lang = localStorage.getItem('lang') || 'en';
+      document.body.classList.remove('lang-zh','lang-en');
+      document.body.classList.add(lang === 'zh' ? 'lang-zh' : 'lang-en');
+      document.getElementById('langBtn').textContent = lang === 'zh' ? 'EN' : '中文';
+    })();
+  </script>
+</body>
+</html>
